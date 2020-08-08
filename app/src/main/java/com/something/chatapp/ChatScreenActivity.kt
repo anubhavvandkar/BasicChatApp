@@ -1,22 +1,24 @@
 package com.something.chatapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
+import com.something.chatapp.adapters.UserAdapter
 import kotlinx.android.synthetic.main.activity_chat_screen.*
-import kotlinx.android.synthetic.main.activity_users.*
+
 
 class ChatScreenActivity : AppCompatActivity() {
 
@@ -29,11 +31,11 @@ class ChatScreenActivity : AppCompatActivity() {
     private lateinit var adapter: ArrayAdapter<String>
     private var auth = FirebaseAuth.getInstance()
 
+    private val TOPIC = "/topics/something"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_screen)
-
-        loadEmails()
 
         fab=findViewById(R.id.fab)
         bottomBar=findViewById(R.id.bottomAppBar)
@@ -65,12 +67,13 @@ class ChatScreenActivity : AppCompatActivity() {
             }
         })
     }
-    override fun onStart() {
-        recycler_chat.adapter?.notifyDataSetChanged()
-        super.onStart()
-    }
     override fun onResume() {
-        recycler_chat.adapter?.notifyDataSetChanged()
+        loadEmails()
+
+        recycler_chat.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = UserAdapter(emails, users)
+        }
         super.onResume()
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -99,6 +102,8 @@ class ChatScreenActivity : AppCompatActivity() {
         startActivity(intent)
     }
     private fun loadEmails(){
+        emails.clear()
+        users.clear()
         fireStore.collection("users/"+auth.currentUser?.uid+"/chats")
             .get()
             .addOnSuccessListener { user ->
@@ -116,6 +121,8 @@ class ChatScreenActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+                        .addOnSuccessListener { Log.i("Update", "Subscribed!") }
                     intent.putExtra("ROOM_ID", document.get("roomID").toString())
                     intent.putExtra("RECEIVER_USER", users[position])
                     startActivity(intent)

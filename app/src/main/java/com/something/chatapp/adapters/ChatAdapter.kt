@@ -1,16 +1,21 @@
-package com.something.chatapp
+package com.something.chatapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.something.chatapp.ChatMessage
+import com.something.chatapp.R
 import kotlinx.android.synthetic.main.recycler_list_receiver.view.*
 
 class ChatAdapter(private val chatMessages: List<ChatMessage>, private val uid: String): RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater, parent)
+        return ViewHolder(
+            inflater,
+            parent
+        )
     }
     override fun getItemCount(): Int {
         return chatMessages.size

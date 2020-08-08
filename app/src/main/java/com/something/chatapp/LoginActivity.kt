@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
 
     fun loginClicked(view: View){
 
+        val button = findViewById<Button>(R.id.loginButton)
+        button.text = getString(R.string.logging)
         if(emailText?.text == null || passwordText?.text == null || emailText?.text?.isEmpty()!! || passwordText?.text?.isEmpty()!!) {
             Toast.makeText(this, "Please fill email and password", Toast.LENGTH_SHORT).show()
             return

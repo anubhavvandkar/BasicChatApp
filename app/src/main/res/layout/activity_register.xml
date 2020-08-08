@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#393939"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextTextUser"
@@ -97,5 +97,5 @@
         android:textColor="@color/colorPrimary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

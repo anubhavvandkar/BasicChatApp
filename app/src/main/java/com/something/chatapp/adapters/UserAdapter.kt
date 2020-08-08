@@ -1,9 +1,10 @@
-package com.something.chatapp
+package com.something.chatapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.something.chatapp.R
 
 class UserAdapter(private val emails: ArrayList<String>, private val users: ArrayList<String>): RecyclerView.Adapter<ChatsViewHolder>(){
 

@@ -3,6 +3,7 @@ package com.something.chatapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun registerClicked(view: View){
+
+        val button = findViewById<Button>(R.id.registerButton)
+        button.text = getString(R.string.registering)
         if(emailText?.text == null || passwordText?.text == null || emailText?.text?.isEmpty()!! || passwordText?.text?.isEmpty()!! || userText?.text?.isEmpty()!! || userText?.text?.isEmpty()!!) {
             Toast.makeText(this, "Please fill all fields first", Toast.LENGTH_SHORT).show()
             return

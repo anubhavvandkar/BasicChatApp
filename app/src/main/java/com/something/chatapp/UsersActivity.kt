@@ -5,18 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.auth.User
+import com.google.firebase.messaging.FirebaseMessaging
+import com.something.chatapp.adapters.UserAdapter
 import kotlinx.android.synthetic.main.activity_users.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +27,8 @@ class UsersActivity : AppCompatActivity() {
     private val fireStore = FirebaseFirestore.getInstance()
     private val fireStore1 = FirebaseFirestore.getInstance()
     private lateinit var context: Context
+
+    private val TOPIC = "/topics/something"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +112,8 @@ class UsersActivity : AppCompatActivity() {
                     fireStore1.collection("users/"+auth.currentUser?.uid+"/chats")
                         .add(data)
                         .addOnSuccessListener {
+                            FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+                                .addOnSuccessListener { Log.i("Update", "Subscribed!") }
                             intent.putExtra("ROOM_ID", data["roomID"])
                             intent.putExtra("RECEIVER_USER", users[position])
                             finish()
