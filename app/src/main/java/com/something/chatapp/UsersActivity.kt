@@ -28,8 +28,6 @@ class UsersActivity : AppCompatActivity() {
     private val fireStore1 = FirebaseFirestore.getInstance()
     private lateinit var context: Context
 
-    private val TOPIC = "/topics/something"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users)
@@ -97,6 +95,7 @@ class UsersActivity : AppCompatActivity() {
                     for(document in documents){
                         intent.putExtra("ROOM_ID",document.get("roomID").toString())
                         intent.putExtra("RECEIVER_USER", users[position])
+                        intent.putExtra("RECEIVER_EMAIL", emails[position])
                         finish()
                         startActivity(intent)
                     }
@@ -112,10 +111,9 @@ class UsersActivity : AppCompatActivity() {
                     fireStore1.collection("users/"+auth.currentUser?.uid+"/chats")
                         .add(data)
                         .addOnSuccessListener {
-                            FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
-                                .addOnSuccessListener { Log.i("Update", "Subscribed!") }
                             intent.putExtra("ROOM_ID", data["roomID"])
                             intent.putExtra("RECEIVER_USER", users[position])
+                            intent.putExtra("RECEIVER_EMAIL", emails[position])
                             finish()
                             startActivity(intent)
                             return@addOnSuccessListener

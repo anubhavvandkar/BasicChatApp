@@ -15,6 +15,9 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.something.chatapp.adapters.UserAdapter
 import kotlinx.android.synthetic.main.activity_chat_screen.*
@@ -31,7 +34,6 @@ class ChatScreenActivity : AppCompatActivity() {
     private lateinit var adapter: ArrayAdapter<String>
     private var auth = FirebaseAuth.getInstance()
 
-    private val TOPIC = "/topics/something"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class ChatScreenActivity : AppCompatActivity() {
         fab=findViewById(R.id.fab)
         bottomBar=findViewById(R.id.bottomAppBar)
         setSupportActionBar(bottomBar)
+
+        setRegistration()
 
         recycler_chat.apply {
             layoutManager = LinearLayoutManager(context)
@@ -50,6 +54,25 @@ class ChatScreenActivity : AppCompatActivity() {
                 startChat(position)
             }
         })
+    }
+    private fun setRegistration(){
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            Log.i("somewhere", "token received: "+it.token)
+            MyFirebaseMessagingService.token = it.token
+            val data = hashMapOf(
+                "registration" to it.token
+            )
+            fireStore.collection("users")
+                .whereEqualTo("email", auth.currentUser?.email)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        document.reference.set(data, SetOptions.merge())
+                    }
+                }
+        }.addOnFailureListener{
+            Log.i("somewhere", "token fetch failed")
+        }
     }
     interface OnItemClickListener {
         fun onItemClicked(position: Int, view: View)
@@ -121,10 +144,9 @@ class ChatScreenActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
-                        .addOnSuccessListener { Log.i("Update", "Subscribed!") }
                     intent.putExtra("ROOM_ID", document.get("roomID").toString())
                     intent.putExtra("RECEIVER_USER", users[position])
+                    intent.putExtra("RECEIVER_EMAIL", emails[position])
                     startActivity(intent)
                 }
             }

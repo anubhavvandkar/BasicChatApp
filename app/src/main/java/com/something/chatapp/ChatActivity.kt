@@ -33,14 +33,14 @@ class ChatActivity : AppCompatActivity() {
     private val chatMessages = ArrayList<ChatMessage>()
     private var chatRegistration: ListenerRegistration? = null
     private var roomId: String? = null
-
-    private val TOPIC = "/topics/something"
+    private lateinit var registration: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
         roomId = intent.getStringExtra("ROOM_ID")
+        getRegistration()
         initList()
         setViewListeners()
 
@@ -48,6 +48,16 @@ class ChatActivity : AppCompatActivity() {
         toolbar.title = intent.getStringExtra("RECEIVER_USER")
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         setSupportActionBar(toolbar)
+    }
+    private fun getRegistration(){
+        fireStore.collection("users")
+            .whereEqualTo("email", intent.getStringExtra("RECEIVER_EMAIL"))
+            .get()
+            .addOnSuccessListener { users->
+                for (user in users){
+                    registration = (user["registration"] as String?).toString()
+                }
+            }
     }
     private fun setViewListeners() {
         fabSend.setOnClickListener {
@@ -106,7 +116,7 @@ class ChatActivity : AppCompatActivity() {
             ))
             .addOnSuccessListener {
                 PushNotification(
-                    TOPIC,
+                    registration,
                     NotificationData("You have a new message from "+auth.currentUser?.email.toString(), message)
                 ).also {
                     sendNotification(it)
