@@ -1,4 +1,4 @@
-package com.something.chatapp
+package com.something.chatapp.services
 
 import com.something.chatapp.dataclass.Constants.Companion.CONTENT_TYPE
 import com.something.chatapp.dataclass.Constants.Companion.SERVER_KEY

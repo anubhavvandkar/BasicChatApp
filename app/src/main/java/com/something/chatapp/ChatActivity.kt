@@ -13,6 +13,7 @@ import com.google.gson.Gson
 import com.something.chatapp.adapters.ChatAdapter
 import com.something.chatapp.dataclass.NotificationData
 import com.something.chatapp.dataclass.PushNotification
+import com.something.chatapp.services.RetrofitInstance
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

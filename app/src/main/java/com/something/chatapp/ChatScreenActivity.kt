@@ -17,9 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.something.chatapp.adapters.UserAdapter
+import com.something.chatapp.services.MyFirebaseMessagingService
 import kotlinx.android.synthetic.main.activity_chat_screen.*
 
 

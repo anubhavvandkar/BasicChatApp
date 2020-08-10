@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".services.MyFirebaseMessagingService"
             android:permission="com.google.android.c2dm.permission.SEND"
             android:exported="false">
             <intent-filter>

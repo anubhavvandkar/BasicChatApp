@@ -1,4 +1,4 @@
-package com.something.chatapp
+package com.something.chatapp.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.something.chatapp.ChatScreenActivity
+import com.something.chatapp.R
 import java.util.*
 
 class MyFirebaseMessagingService : FirebaseMessagingService(){
